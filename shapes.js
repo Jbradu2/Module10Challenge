@@ -11,6 +11,7 @@ class Shape {
   }
 
   render() {
+    return '';//default to return empty string
 
   }
 }

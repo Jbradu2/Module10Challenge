@@ -39,8 +39,16 @@ const questions = [
   },
 ];
 
+// Define an object to map shape options to their corresponding classes
+const shapeClasses = {
+  circle: Circle,
+  triangle: Triangle,
+  square: Square,
+};
+
 
 // WHEN I have entered input for all the prompts
+function generateLogo(){
 inquirer.prompt(questions).then((anwsers) => {
 
   const text= anwsers.text;
@@ -49,24 +57,12 @@ inquirer.prompt(questions).then((anwsers) => {
   const shapeColor = anwsers.shapeColor;
 
 
-  let shape;
 
-  switch (shapeType) {
-    case 'circle':
-      shape = new Circle();
-      break;
-    case 'triangle':
-      shape = new Triangle();
-      break;
-    case 'square':
-      shape = new Square();
-      break;
-    default:
-      console.log('Invalid shape selection');
-      return;
-  }
+if (shapeType in shapeClasses) {
+const shape = new shapeClasses[shapeType]();
+    shape.setColor(shapeColor);
 
-  shape.setColor(shapeColor);
+
   // WHEN I open the `logo.svg` file in a browser
   // THEN I am shown a 300x200 pixel image that matches the criteria I entered
 
@@ -77,7 +73,14 @@ inquirer.prompt(questions).then((anwsers) => {
 </svg>
   `;
   // THEN an SVG file is created named `logo.svg`
-  fs.writeFile('logo.svg', svgContent);
+  fs.writeFileSync('logo.svg', svgContent);
   // AND the output text "Generated logo.svg" is printed in the command line
   console.log("Generated logo.svg");
+}else {
+  console.log('Invalid shape selection');
+}
 });
+}
+
+// Export the generateLogo function
+module.exports = { generateLogo };
